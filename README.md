@@ -31,9 +31,10 @@ Create a React Native application that:
 - Display weather in cards per city
 - Add the ability to sort locations based on different parameters
 
-## Artefacts
+## How do submit
 
-- Please provide us with a link to a GitHub repo with your solution
+- Please fork this repository as your starting point
+- As a submission, provide us with a link to your finished repo
 - Please include instructions for how to install and run the project in the readme
 
 ## Evaluation Criteria
