@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# Senior React Native Engineer - Take-Home Challenge
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Build a **Health Environment Tracker** mobile application that helps users understand how environmental conditions might impact their health activities. The app integrates weather data and provides personalized activity recommendations.
 
-## Get started
+- **Estimated Time:** 2 hours
+- **Tech Stack:** React Native (Expo), TypeScript
 
-1. Install dependencies
+## Description
 
-   ```bash
-   npm install
-   ```
+Create a React Native application that:
 
-2. Start the app
+- Authenticates users with a simple login flow
+- Fetches and displays weather data from an external API
+- Provides health activity recommendations based on weather conditions
+- Allows users to sort and filter recommendations
 
-   ```bash
-   npx expo start
-   ```
+## Technical Requirements
 
-In the output, you'll find options to open the app in a
+### 1. Authentication
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- register flow
+- login screen with email/password
+- Store auth state and implement a way to store registered users
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 2. External API Integration
 
-## Get a fresh project
+- Fetch weather for at least 3 cities using a public free API of your choice
 
-When you're ready, run:
+### 3. Main Dashboard
 
-```bash
-npm run reset-project
-```
+- Display weather in cards per city
+- Add the ability to sort locations based on different parameters
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Artefacts
 
-## Learn more
+- Please provide us with a link to a GitHub repo with your solution
+- Please include instructions for how to install and run the project in the readme
 
-To learn more about developing your project with Expo, look at the following resources:
+## Evaluation Criteria
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- State Management
+- Persistence
+- Authentification & Security
+- API Integration & Error Handling
+- Architecture & Code Quality
+- Advanced Features
+- Development Experience
