@@ -11,8 +11,7 @@ Create a React Native application that:
 
 - Authenticates users with a simple login flow
 - Fetches and displays weather data from an external API
-- Provides health activity recommendations based on weather conditions
-- Allows users to sort and filter recommendations
+- Allows users to sort and filter
 
 ## Technical Requirements
 
