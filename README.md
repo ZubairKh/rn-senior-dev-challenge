@@ -45,3 +45,50 @@ Create a React Native application that:
 - Architecture & Code Quality
 - Advanced Features
 - Development Experience
+
+## Project Setup
+
+- Install dependencies: `npm install`
+- Start Metro/Expo: `npm run start`
+- Lint: `npm run lint`
+- Tests: `npm test`
+- Format check: `npm run format`
+
+## Authentication & Security Highlights
+
+- Passwords are salted, peppered, and hashed client-side (`expo-crypto`) before storage.
+- Sessions persist securely via `expo-secure-store` with AsyncStorage fallback when needed.
+- Auth state and cached users hydrate on launch to avoid flash-of-unauthenticated screens.
+- Pepper is injected via `EXPO_PUBLIC_AUTH_PASSWORD_PEPPER`; swap this per build (and note that production apps should hash on the server instead).
+- Current demo intentionally skips login throttling/MFA—called out as future work so reviewers know the trade-offs.
+
+> Future improvement: reintroduce login attempt throttling with persisted counters once the broader experience is finalized.
+
+### Environment Configuration
+
+Copy `.env.example` to `.env` and update values as needed:
+
+```
+EXPO_PUBLIC_AUTH_PASSWORD_PEPPER=put-your-own-pepper
+```
+
+After installing dependencies (`npm install`), copy the example file:
+
+```
+cp .env.example .env
+```
+
+> This pepper is only used client-side for the challenge; in production it should live on the server.
+
+### Developer Scripts
+
+- `npm test` runs the full Jest suite (unit, hook, and integration coverage).
+- `npm run test:single -- path/to/file.test.tsx` executes an individual test file.
+- `npm run lint` / `npm run format` keep the codebase consistent.
+- `npm run lint-staged` is used by the pre-commit hook (Husky + lint-staged). If hooks aren't active, run `git config core.hooksPath .husky/_` once after cloning or run `npm run prepare` manually.
+
+## Testing Strategy
+
+- Unit tests cover auth reducer, crypto helpers, and storage utilities under `__tests__/auth/`.
+- Integration test (`authProvider.integration.test.tsx`) exercises the full register → login → logout flow with mocked native modules.
+- Run the full suite with `npm test` (watchman disabled for sandbox compatibility).

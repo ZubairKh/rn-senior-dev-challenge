@@ -1,0 +1,32 @@
+module.exports = {
+  expo: {
+    name: 'rn-senior-dev-challenge',
+    slug: 'rn-senior-dev-challenge',
+    scheme: 'rn-senior-dev-challenge',
+    version: '1.0.0',
+    orientation: 'portrait',
+    icon: './assets/images/icon.png',
+    userInterfaceStyle: 'automatic',
+    splash: {
+      image: './assets/images/splash-icon.png',
+      resizeMode: 'contain',
+      backgroundColor: '#ffffff',
+    },
+    assetBundlePatterns: ['**/*'],
+    ios: {
+      supportsTablet: true,
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: './assets/images/adaptive-icon.png',
+        backgroundColor: '#ffffff',
+      },
+    },
+    web: {
+      favicon: './assets/images/favicon.png',
+    },
+    extra: {
+      authPasswordPepper: process.env.AUTH_PASSWORD_PEPPER ?? 'change-me',
+    },
+  },
+};
