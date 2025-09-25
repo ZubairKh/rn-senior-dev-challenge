@@ -1,44 +1,37 @@
-import { useRouter } from 'expo-router';
-
+import { AuthFooterSwitch } from '@/components/auth/AuthFooterSwitch';
 import { AuthPrimaryButton } from '@/components/auth/AuthPrimaryButton';
 import { AuthScaffold } from '@/components/auth/AuthScaffold';
 import { AuthTextField } from '@/components/auth/AuthTextField';
 import { authStyles } from '@/components/auth/styles';
 import { ThemedText } from '@/components/ThemedText';
-import { AUTH_RULES } from '@/constants/auth';
 import { ROUTES } from '@/constants/routes';
-import { useRegisterForm } from '@/hooks/auth/useRegisterForm';
+import { useLoginForm } from '@/hooks/auth/useLoginForm';
 
-export default function RegisterScreen() {
-  const router = useRouter();
-  const handleBackPress = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-
-    router.replace(ROUTES.auth.login);
-  };
+export default function LoginScreen() {
   const {
     email,
     setEmail,
     password,
     setPassword,
-    confirmPassword,
-    setConfirmPassword,
     submit,
-    formError,
     isProcessing,
+    formError,
     canSubmit,
     handleFocus,
-  } = useRegisterForm();
+  } = useLoginForm();
 
   return (
     <AuthScaffold
-      title="Create an account"
-      subtitle="Personalize activity recommendations with precise weather insights."
-      scrollable
-      onBackPress={handleBackPress}
+      title="Welcome"
+      subtitle="Sign in to track how the environment impacts your routines."
+      contentAlignmentOverride="center"
+      footer={
+        <AuthFooterSwitch
+          prompt="Need an account?"
+          linkLabel="Create one"
+          href={ROUTES.auth.register}
+        />
+      }
     >
       <AuthTextField
         label="Email"
@@ -53,32 +46,23 @@ export default function RegisterScreen() {
       />
       <AuthTextField
         label="Password"
-        placeholder="8+ characters"
+        placeholder="••••••••"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
-        textContentType="newPassword"
-        returnKeyType="next"
-        onFocus={handleFocus}
-      />
-      <ThemedText style={authStyles.helperText}>{AUTH_RULES.passwordGuidance}</ThemedText>
-      <AuthTextField
-        label="Confirm password"
-        placeholder="Repeat password"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
         textContentType="password"
         returnKeyType="done"
         onSubmitEditing={submit}
         onFocus={handleFocus}
       />
       {formError ? (
-        <ThemedText style={authStyles.errorText}>{formError}</ThemedText>
+        <ThemedText style={[authStyles.helperText, { color: '#ff6b6b' }]}>
+          {formError}
+        </ThemedText>
       ) : null}
       <AuthPrimaryButton
-        label="Sign up"
-        loadingLabel="Creating account…"
+        label="Sign in"
+        loadingLabel="Signing in…"
         isLoading={isProcessing}
         onPress={submit}
         disabled={!canSubmit}
