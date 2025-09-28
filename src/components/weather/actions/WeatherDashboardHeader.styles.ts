@@ -49,7 +49,7 @@ export const weatherDashboardHeaderStyles = StyleSheet.create({
   },
   signOutLabel: {
     fontWeight: '600',
-    fontSize: 13,
+    fontSize: 12,
   },
   actionsRow: {
     flexDirection: 'row',
@@ -74,7 +74,7 @@ export const weatherDashboardHeaderStyles = StyleSheet.create({
   },
   refreshLabel: {
     color: '#0a7ea4',
-    fontSize: 13,
+    fontSize: 12,
   },
   helperText: {
     fontSize: 12,

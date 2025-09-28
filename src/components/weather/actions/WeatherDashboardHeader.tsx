@@ -1,45 +1,30 @@
-import React, { useCallback, useMemo } from 'react';
-import { Alert, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { WeatherDashboardActions } from './WeatherDashboardActions';
 import { WeatherDashboardGreeting } from './WeatherDashboardGreeting';
 import { weatherDashboardHeaderStyles } from './WeatherDashboardHeader.styles';
-import { WeatherDashboardHeaderProps } from './WeatherDashboardHeader.types';
 
-export const WeatherDashboardHeader: React.FC<WeatherDashboardHeaderProps> = ({
-  name,
+export const WeatherDashboardHeader: React.FC<{ cityCount: number }> = ({
   cityCount,
-  onLogout,
-  isProcessingLogout,
-  lastUpdatedLabel,
-  onRefresh,
-  isRefreshing,
 }) => {
   const surface = useThemeColor({}, 'surface');
   const border = useThemeColor({}, 'border');
 
+  // Get user from context for greeting
+  const {
+    state: { user },
+  } = useAuth();
+  const name = user?.email?.split('@')[0] ?? 'there';
   const displayName = useMemo(() => {
-    if (!name) {
-      return 'there';
-    }
-
+    if (!name) return 'there';
     return name.charAt(0).toUpperCase() + name.slice(1);
   }, [name]);
-
-  const handleSignOutPress = useCallback(() => {
-    if (isProcessingLogout) {
-      return;
-    }
-
-    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Sign out', style: 'destructive', onPress: onLogout },
-    ]);
-  }, [isProcessingLogout, onLogout]);
 
   return (
     <View style={weatherDashboardHeaderStyles.wrapper}>
@@ -56,14 +41,7 @@ export const WeatherDashboardHeader: React.FC<WeatherDashboardHeaderProps> = ({
           data.
         </ThemedText>
         <View style={weatherDashboardHeaderStyles.headerRow}>
-          <WeatherDashboardActions
-            lastUpdatedLabel={lastUpdatedLabel}
-            onRefresh={onRefresh}
-            onSignOut={handleSignOutPress}
-            isRefreshing={isRefreshing}
-            disableSignOut={isProcessingLogout}
-            isSignOutProcessing={isProcessingLogout}
-          />
+          <WeatherDashboardActions />
         </View>
       </ThemedView>
     </View>

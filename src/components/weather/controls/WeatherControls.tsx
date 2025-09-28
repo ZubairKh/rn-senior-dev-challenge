@@ -1,27 +1,23 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 
+import { useWeather } from '@/contexts/WeatherContext';
 import { weatherControlsStyles } from './WeatherControls.styles';
-import { WeatherControlsProps } from './WeatherControls.types';
 import {
   buildFilterSegmentOptions,
   buildSortSegmentOptions,
 } from './WeatherControls.utils';
 import { WeatherControlsSegments } from './WeatherControlsSegments';
 
-export const WeatherControls: React.FC<WeatherControlsProps> = ({
-  sortBy,
-  filter,
-  onSortChange,
-  onFilterChange,
-}) => {
+export const WeatherControls: React.FC = () => {
+  const { state, setSort, setFilter } = useWeather();
   const sortOptions = useMemo(
-    () => buildSortSegmentOptions(sortBy, onSortChange),
-    [sortBy, onSortChange],
+    () => buildSortSegmentOptions(state.sortBy, setSort),
+    [state.sortBy, setSort],
   );
   const filterOptions = useMemo(
-    () => buildFilterSegmentOptions(filter, onFilterChange),
-    [filter, onFilterChange],
+    () => buildFilterSegmentOptions(state.filter, setFilter),
+    [state.filter, setFilter],
   );
 
   return (

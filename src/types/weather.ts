@@ -21,6 +21,7 @@ export type WeatherSnapshot = {
   sunrise: number;
   sunset: number;
   observationTime: number;
+  healthGuide?: string; // New: health prediction/guide
 };
 
 export type WeatherSortOption = 'name' | 'temperature' | 'humidity' | 'windSpeed';

@@ -1,5 +1,19 @@
 # Senior React Native Engineer - Take-Home Challenge
 
+## Table of Contents
+
+- [Challenge Instructions](#senior-react-native-engineer---take-home-challenge)
+- [Project Setup](#project-setup)
+- [Authentication & Security Highlights](#authentication--security-highlights)
+- [Environment Configuration](#environment-configuration)
+- [Developer Scripts](#developer-scripts)
+- [Weather Dashboard Highlights](#weather-dashboard-highlights)
+- [Project Structure](#project-structure)
+- [Testing Strategy](#testing-strategy)
+
+<details>
+<summary>Reviewer Challenge Information (Click to expand)</summary>
+
 Build a **Health Environment Tracker** mobile application that helps users understand how environmental conditions might impact their health activities. The app integrates weather data and provides personalized activity recommendations.
 
 - **Estimated Time:** 2 hours
@@ -45,6 +59,8 @@ Create a React Native application that:
 - Architecture & Code Quality
 - Advanced Features
 - Development Experience
+
+</details>
 
 ## Project Setup
 
@@ -93,16 +109,53 @@ EXPO_PUBLIC_OWM_API_KEY=your-openweather-api-key
 - Sorting (name, temperature, humidity, wind) and filtering (all, comfortable, rainy) keep the data actionable.
 - Responsive cards, pull-to-refresh, and quick settings panel (theme toggle + sign-out) mirror modern native dashboard patterns across portrait and landscape modes.
 
+> **Note:**
+> The city list is static for demo purposes, as the challenge only requires weather for at least 3 cities. In a real-world app, this can be easily extended to support dynamic city search or user-driven city management by updating the architecture to fetch cities from an API or allow user input.
+
 ### Project Structure
 
-- `components/weather/card` – self-contained card, styling, and metric helpers.
-- `components/weather/controls` – segmented control UI and meta row.
-- `components/weather/dashboard` – hero header copy, sign-out CTA, and layout.
-- `contexts/` – auth and weather providers backed by reducers and services.
-- `services/` – API, storage, and crypto utilities kept framework-agnostic for reuse.
+- `app/` – App entry, navigation, screens, and route layouts (including auth and settings).
+- `assets/` – Fonts and images used throughout the app.
+- `components/` – Reusable UI components, organized by feature:
+  - `auth/` – Auth form fields, buttons, and scaffolding.
+  - `common/` – Shared UI like full-screen loader.
+  - `dashboard/` – Main dashboard screen and styles.
+  - `layout/` – Backgrounds and layout helpers.
+  - `ui/` – Icon and tab bar components.
+  - `weather/` – Weather feature UI, further split into:
+    - `card/` – Weather cards, metrics, health guide, and related helpers.
+    - `controls/` – Segmented controls and filter/sort UI.
+    - `actions/` – Dashboard header, greeting, refresh, and sign-out.
+- `constants/` – App-wide constants (colors, routes, weather config, etc).
+- `contexts/` – React context providers and reducers for auth and weather state.
+- `hooks/` – Custom React hooks for color scheme, responsive layout, and feature logic.
+- `services/` – API clients, storage, crypto, and feature logic (organized by domain).
+- `types/` – TypeScript type definitions for app models and features.
 
 ## Testing Strategy
 
-- Unit tests cover auth reducer, crypto helpers, and storage utilities under `__tests__/auth/`.
-- Integration test (`authProvider.integration.test.tsx`) exercises the full register → login → logout flow with mocked native modules.
+- **Auth:**
+  - Unit tests for auth reducer, crypto helpers, and storage utilities (`__tests__/auth/`).
+  - Integration test (`authProvider.integration.test.tsx`) covers the full register → login → logout flow with mocked native modules.
+- **Weather:**
+  - API tests for weather data fetching, error handling, and partial failures (`__tests__/weather/weatherApi.test.ts`).
+  - Reducer tests for state, sorting, filtering, and error handling (`__tests__/weather/weatherReducer.test.ts`).
+  - Storage tests for AsyncStorage, user preferences, clearing, and edge cases (`__tests__/weather/weatherStorage.test.ts`).
+  - Insights utility tests for comfort/rainy detection, filtering, sorting, and scoring (`__tests__/weather/weatherInsights.test.ts`).
+- **Test Utilities:**
+  - Custom mocks for native modules and storage are provided in `__tests__/test-utils/mocks/` and used throughout tests for reliable isolation.
 - Run the full suite with `npm test` (watchman disabled for sandbox compatibility).
+
+## Possible Future Filter Options
+
+The weather dashboard is designed to be easily extensible. Here are some additional filter options that could be added to enhance user experience:
+
+- **Hot:** Show cities with high temperatures (e.g., above 30°C).
+- **Cold:** Show cities with low temperatures (e.g., below 10°C).
+- **Windy:** Show cities with high wind speeds (e.g., above 10 m/s).
+- **Clear:** Show cities with clear weather (e.g., conditionId 800).
+- **Cloudy:** Show cities with clouds (e.g., conditionId 801–804).
+- **Humid:** Show cities with high humidity (e.g., above 80%).
+- **Stormy:** Show cities with thunderstorm conditions (e.g., conditionId 200–232).
+
+These filters can be implemented by extending the filter logic and UI configuration. See the code comments and `filterSnapshots` function for guidance.

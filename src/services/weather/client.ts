@@ -1,7 +1,7 @@
 import { ENV, assertWeatherEnv } from '@/constants/environment';
 import { WEATHER_DEFAULT_UNITS } from '@/constants/weather';
-import type { WeatherCity, WeatherSnapshot, WeatherUnits } from '@/types/weather';
 import { logger } from '@/services/logger';
+import type { WeatherCity, WeatherSnapshot, WeatherUnits } from '@/types/weather';
 
 const OWM_SINGLE_ENDPOINT = '/data/2.5/weather';
 
@@ -45,6 +45,8 @@ type OpenWeatherPayload = {
 
 type BuildUrlParams = Record<string, string | number | undefined>;
 
+import { getHealthGuideForWeather } from './insights';
+
 const mapSnapshot = (payload: OpenWeatherPayload, explicitCity?: WeatherCity): WeatherSnapshot => {
   const condition = payload.weather?.[0];
   const city: WeatherCity =
@@ -57,7 +59,7 @@ const mapSnapshot = (payload: OpenWeatherPayload, explicitCity?: WeatherCity): W
       longitude: payload.coord.lon,
     } satisfies WeatherCity);
 
-  return {
+  const snapshot: WeatherSnapshot = {
     city,
     temperature: payload.main.temp,
     temperatureFeelsLike: payload.main.feels_like,
@@ -71,6 +73,8 @@ const mapSnapshot = (payload: OpenWeatherPayload, explicitCity?: WeatherCity): W
     sunset: payload.sys.sunset,
     observationTime: payload.dt,
   };
+  snapshot.healthGuide = getHealthGuideForWeather(snapshot);
+  return snapshot;
 };
 
 const safeReadError = async (response: Response): Promise<string> => {
@@ -98,7 +102,7 @@ const buildUrl = (endpoint: string, params: BuildUrlParams) => {
 };
 
 export class WeatherApiClient {
-  constructor(private readonly httpClient: HttpClient = fetch) {}
+  constructor(private readonly httpClient: HttpClient = fetch) { }
 
   async fetchCity(city: WeatherCity, units: WeatherUnits = WEATHER_DEFAULT_UNITS): Promise<WeatherSnapshot> {
     const url = buildUrl(OWM_SINGLE_ENDPOINT, {

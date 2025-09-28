@@ -1,65 +1,38 @@
-import React, { useMemo } from 'react';
-import { RefreshControl, ScrollView, View, useWindowDimensions } from 'react-native';
-
 import { BlobBackdrop } from '@/components/layout/BlobBackdrop';
+import { WeatherDashboardHeader } from '@/components/weather/actions';
 import { WeatherCard } from '@/components/weather/card';
 import { WeatherControls } from '@/components/weather/controls';
-import { WeatherDashboardHeader } from '@/components/weather/dashboard';
 import { WeatherEmptyState } from '@/components/weather/WeatherEmptyState';
 import { WeatherErrorBanner } from '@/components/weather/WeatherErrorBanner';
 import { WeatherLoader } from '@/components/weather/WeatherLoader';
 import { WEATHER_DEFAULT_CITIES } from '@/constants/weather';
 import { useWeather } from '@/contexts/WeatherContext';
-import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useWeatherGridLayout } from '@/hooks/weather/useWeatherGridLayout';
-import { logger } from '@/services/logger';
-import { formatLastUpdatedLabel } from '@/services/weather/formatters';
+import React from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { dashboardDecoratorColors, dashboardStyles } from './DashboardScreen.styles';
+import { useDashboardScreenLayout } from './useDashboardScreenLayout';
 
-export type DashboardScreenProps = {
-  userDisplayName: string;
-  isProcessingLogout: boolean;
-  onLogout: () => void;
-};
-
-export const DashboardScreen: React.FC<DashboardScreenProps> = ({
-  userDisplayName,
-  isProcessingLogout,
-  onLogout,
-}) => {
-  const { state, refresh, setFilter, setSort, visibleSnapshots, isComfortable, isRainy } =
-    useWeather();
-  const { paddingHorizontal, paddingVertical, maxWidth } = useResponsiveLayout();
-  const { width: windowWidth } = useWindowDimensions();
-
+export const DashboardScreen: React.FC = () => {
   const canvas = useThemeColor({}, 'canvas');
-  const handleRefresh = () => {
-    refresh({ silent: true }).catch((error) => {
-      logger.warn('Weather refresh failed', error);
-    });
-  };
 
-  const lastUpdatedLabel = useMemo(
-    () => formatLastUpdatedLabel(state.lastUpdated ?? null),
-    [state.lastUpdated],
-  );
+  const { state, visibleSnapshots, refresh } = useWeather();
+  const { status, error } = state;
 
-  const refreshing = state.status === 'refreshing';
-  const loading = state.status === 'loading';
-  const snapshots = visibleSnapshots;
+  const {
+    containerWidth,
+    scrollContentStyle,
+    horizontalInset,
+    paddingVertical,
+    maxWidth,
+  } = useDashboardScreenLayout();
 
-  const containerWidth = Math.max(
-    Math.min(maxWidth, windowWidth - paddingHorizontal * 2),
-    0,
-  );
   const { gridItemStyle, cardGridStyle } = useWeatherGridLayout(containerWidth);
 
-  const scrollContentStyle = useMemo(() => {
-    return [dashboardStyles.scrollContent, { paddingBottom: paddingVertical + 32 }];
-  }, [paddingVertical]);
-
-  const horizontalInset = useMemo(() => ({ paddingHorizontal }), [paddingHorizontal]);
+  const loading = status === 'loading';
+  const refreshing = status === 'refreshing';
+  const snapshots = visibleSnapshots;
 
   return (
     <BlobBackdrop
@@ -73,8 +46,9 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor="#0a7ea4"
+            onRefresh={() => refresh({ silent: false })}
+            colors={[dashboardDecoratorColors.top]}
+            tintColor={dashboardDecoratorColors.top}
           />
         }
       >
@@ -85,31 +59,18 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             { paddingTop: paddingVertical },
           ]}
         >
-          <WeatherDashboardHeader
-            name={userDisplayName}
-            cityCount={WEATHER_DEFAULT_CITIES.length}
-            isProcessingLogout={isProcessingLogout}
-            onLogout={onLogout}
-            lastUpdatedLabel={lastUpdatedLabel}
-            onRefresh={handleRefresh}
-            isRefreshing={refreshing}
-          />
+          <WeatherDashboardHeader cityCount={WEATHER_DEFAULT_CITIES.length} />
           <View
             style={[
               dashboardStyles.contentFrame,
               { maxWidth: containerWidth || maxWidth },
             ]}
           >
-            <WeatherControls
-              sortBy={state.sortBy}
-              filter={state.filter}
-              onSortChange={setSort}
-              onFilterChange={setFilter}
-            />
+            <WeatherControls />
 
-            {state.error ? (
+            {error ? (
               <WeatherErrorBanner
-                message={state.error}
+                message={error}
                 helper="Pull to refresh or tap Refresh above."
               />
             ) : null}
@@ -125,11 +86,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
                     key={snapshot.city.id}
                     style={[dashboardStyles.cardCell, gridItemStyle]}
                   >
-                    <WeatherCard
-                      snapshot={snapshot}
-                      isComfortable={isComfortable(snapshot)}
-                      isRainy={isRainy(snapshot)}
-                    />
+                    <WeatherCard snapshot={snapshot} />
                   </View>
                 ))}
               </View>

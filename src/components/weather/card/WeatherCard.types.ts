@@ -1,9 +1,8 @@
-import { WeatherSnapshot } from '@/types/weather';
+
+import type { WeatherSnapshot } from '@/types/weather';
 
 export type WeatherCardProps = {
   snapshot: WeatherSnapshot;
-  isComfortable?: boolean;
-  isRainy?: boolean;
 };
 
 export type WeatherBadgeAppearance = {

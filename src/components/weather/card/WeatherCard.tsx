@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
+import { View } from 'react-native';
 import { weatherCardStyles } from './WeatherCard.styles';
 import { WeatherCardProps } from './WeatherCard.types';
 import {
@@ -11,14 +12,16 @@ import {
   resolveBadgeAppearance,
 } from './WeatherCard.utils';
 import { WeatherCardHeader } from './WeatherCardHeader';
+import { WeatherCardHealthGuide } from './WeatherCardHealthGuide';
 import { WeatherCardMetrics } from './WeatherCardMetrics';
 import { WeatherCardTempRow } from './WeatherCardTempRow';
 
-export const WeatherCard: React.FC<WeatherCardProps> = ({
-  snapshot,
-  isComfortable,
-  isRainy,
-}) => {
+import { useWeather } from '@/contexts/WeatherContext';
+
+export const WeatherCard: React.FC<WeatherCardProps> = ({ snapshot }) => {
+  const { isComfortable, isRainy } = useWeather();
+  const comfortable = isComfortable(snapshot);
+  const rainy = isRainy(snapshot);
   const surface = useThemeColor({}, 'surface');
   const border = useThemeColor({}, 'border');
   const accent = useThemeColor({}, 'tint');
@@ -26,13 +29,13 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({
   const badgeAppearance = useMemo(
     () =>
       resolveBadgeAppearance(
-        isComfortable,
-        isRainy,
+        comfortable,
+        rainy,
         controlInactive,
         accent,
         snapshot.conditionLabel,
       ),
-    [accent, controlInactive, isComfortable, isRainy, snapshot.conditionLabel],
+    [accent, controlInactive, comfortable, rainy, snapshot.conditionLabel],
   );
 
   const metricDescriptors = useMemo(() => buildMetricDescriptors(snapshot), [snapshot]);
@@ -65,6 +68,12 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({
         tint={accent}
         background={controlInactive}
       />
+
+      {snapshot.healthGuide && (
+        <View style={{ marginTop: 12 }}>
+          <WeatherCardHealthGuide text={snapshot.healthGuide} />
+        </View>
+      )}
     </ThemedView>
   );
 };

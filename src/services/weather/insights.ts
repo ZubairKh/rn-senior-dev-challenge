@@ -1,3 +1,28 @@
+/**
+ * Returns a health guide/prediction string based on the weather snapshot.
+ * This helps users understand how environmental conditions might impact their health activities.
+ */
+export function getHealthGuideForWeather(snapshot: WeatherSnapshot): string {
+  if (isRainyWeather(snapshot)) {
+    return 'Rain is expected. Outdoor activities may not be ideal. Consider indoor exercise or carry rain gear.';
+  }
+  if (snapshot.temperature > 32) {
+    return 'High temperature detected. Stay hydrated and avoid strenuous outdoor activities during peak heat.';
+  }
+  if (snapshot.temperature < 5) {
+    return 'Cold weather. Dress warmly and limit outdoor exposure, especially for sensitive groups.';
+  }
+  if (snapshot.windSpeed > 10) {
+    return 'Windy conditions. Take caution if cycling or running outdoors.';
+  }
+  if (snapshot.humidity > 80) {
+    return 'High humidity may cause discomfort during physical activity. Stay hydrated.';
+  }
+  if (isComfortableWeather(snapshot)) {
+    return 'Great weather for outdoor activities! Enjoy your walk, run, or cycling.';
+  }
+  return 'Weather is moderate. Adjust your health activities as needed.';
+}
 import {
   WEATHER_COMFORTABLE_RANGE
 } from '@/constants/weather';
@@ -26,6 +51,12 @@ export const isComfortableWeather = (snapshot: WeatherSnapshot) =>
 export const isRainyWeather = (snapshot: WeatherSnapshot) =>
   snapshot.conditionId > 500 && snapshot.conditionId < 600;
 
+/**
+ * Filters the weather snapshots based on the specified filter option.
+ * @param snapshots The weather snapshots to filter.
+ * @param filter The filter option to apply.
+ * @returns The filtered weather snapshots.
+ */
 export const filterSnapshots = (
   snapshots: WeatherSnapshot[],
   filter: WeatherFilterOption,

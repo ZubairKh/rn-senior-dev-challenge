@@ -28,8 +28,8 @@ import {
   WeatherSortOption,
 } from '@/types/weather';
 
-import { weatherInitialState, weatherReducer } from './weatherReducer';
 import type { WeatherState } from './weatherReducer';
+import { weatherInitialState, weatherReducer } from './weatherReducer';
 
 type WeatherContextValue = {
   state: WeatherState;
@@ -57,9 +57,11 @@ export const WeatherProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const hydratedRef = useRef(false);
 
   useEffect(() => {
-    persistWeatherPreferences({ sortBy: state.sortBy, filter: state.filter }).catch((error) => {
-      logger.warn('Failed to persist weather preferences', error);
-    });
+    persistWeatherPreferences({ sortBy: state.sortBy, filter: state.filter }).catch(
+      (error) => {
+        logger.warn('Failed to persist weather preferences', error);
+      },
+    );
   }, [state.sortBy, state.filter]);
 
   const refresh = useCallback(
@@ -69,7 +71,10 @@ export const WeatherProvider: React.FC<PropsWithChildren> = ({ children }) => {
       dispatch({ type: 'request', refreshing: silent });
 
       try {
-        const snapshots = await fetchWeatherForCities(WEATHER_DEFAULT_CITIES, state.units);
+        const snapshots = await fetchWeatherForCities(
+          WEATHER_DEFAULT_CITIES,
+          state.units,
+        );
         const fetchedAt = Date.now();
 
         dispatch({
@@ -82,7 +87,8 @@ export const WeatherProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
         await persistWeatherSnapshots(snapshotsToMap(snapshots), fetchedAt);
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error fetching weather';
+        const message =
+          error instanceof Error ? error.message : 'Unknown error fetching weather';
         dispatch({ type: 'failure', payload: { error: message } });
         logger.error('Weather refresh failed', error);
       }
@@ -156,7 +162,9 @@ export const WeatherProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (hydratedRef.current && Object.keys(state.snapshots).length === 0) {
-      refresh({ silent: true }).catch((error) => logger.error('Initial weather refresh failed', error));
+      refresh({ silent: true }).catch((error) =>
+        logger.error('Initial weather refresh failed', error),
+      );
     }
   }, [refresh, state.snapshots]);
 

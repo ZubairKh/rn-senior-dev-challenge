@@ -1,6 +1,6 @@
+import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     paddingVertical: 64,
     gap: 14,
     alignItems: 'center',
+    borderRadius: '5%',
   },
   iconBadge: {
     width: 64,
