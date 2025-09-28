@@ -104,10 +104,12 @@ EXPO_PUBLIC_OWM_API_KEY=your-openweather-api-key
 
 ## Weather Dashboard Highlights
 
-- Fetches live conditions for Berlin, London, Paris, Amsterdam, and Prague with OpenWeather per-city requests (free-tier friendly).
-- Caches the latest snapshots and user preferences locally for instant rehydration and offline resilience.
+- Fetches live conditions for a curated list of cities with OpenWeather per-city requests (free-tier friendly).
 - Sorting (name, temperature, humidity, wind) and filtering (all, comfortable, rainy) keep the data actionable.
-- Responsive cards, pull-to-refresh, and quick settings panel (theme toggle + sign-out) mirror modern native dashboard patterns across portrait and landscape modes.
+
+**Improvement Opportunity:**
+
+- Add a city search feature so users can search for and view weather conditions for any city of their choice, not just the static demo list. This would enhance personalization and real-world utility.
 
 > **Note:**
 > The city list is static for demo purposes, as the challenge only requires weather for at least 3 cities. In a real-world app, this can be easily extended to support dynamic city search or user-driven city management by updating the architecture to fetch cities from an API or allow user input.
