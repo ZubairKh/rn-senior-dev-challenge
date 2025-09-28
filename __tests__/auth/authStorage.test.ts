@@ -1,6 +1,6 @@
 import { AUTH_STORAGE_KEYS } from '@/constants/auth';
-import { applyStorageMocks } from '@/__tests__/test-utils/mocks/storage/applyStorageMocks';
 import { AuthSession, AuthUser } from '@/types/auth';
+import { applyStorageMocks } from '../test-utils/mocks/storage/applyStorageMocks';
 
 const createMockUser = (): AuthUser => ({
   id: 'user-1',
