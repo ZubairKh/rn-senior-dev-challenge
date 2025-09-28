@@ -2,6 +2,10 @@
  * Returns a health guide/prediction string based on the weather snapshot.
  * This helps users understand how environmental conditions might impact their health activities.
  */
+import {
+  WEATHER_COMFORTABLE_RANGE
+} from '@/constants/weather';
+import type { WeatherFilterOption, WeatherSnapshot, WeatherSortOption } from '@/types/weather';
 export function getHealthGuideForWeather(snapshot: WeatherSnapshot): string {
   if (isRainyWeather(snapshot)) {
     return 'Rain is expected. Outdoor activities may not be ideal. Consider indoor exercise or carry rain gear.';
@@ -23,10 +27,6 @@ export function getHealthGuideForWeather(snapshot: WeatherSnapshot): string {
   }
   return 'Weather is moderate. Adjust your health activities as needed.';
 }
-import {
-  WEATHER_COMFORTABLE_RANGE
-} from '@/constants/weather';
-import type { WeatherFilterOption, WeatherSnapshot, WeatherSortOption } from '@/types/weather';
 
 /**
  * Determines if the weather snapshot represents comfortable weather.

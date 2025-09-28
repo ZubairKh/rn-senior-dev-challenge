@@ -3,6 +3,8 @@ import { WEATHER_DEFAULT_UNITS } from '@/constants/weather';
 import { logger } from '@/services/logger';
 import type { WeatherCity, WeatherSnapshot, WeatherUnits } from '@/types/weather';
 
+import { getHealthGuideForWeather } from './insights';
+
 const OWM_SINGLE_ENDPOINT = '/data/2.5/weather';
 
 export class WeatherApiError extends Error {
@@ -45,8 +47,6 @@ type OpenWeatherPayload = {
 
 type BuildUrlParams = Record<string, string | number | undefined>;
 
-import { getHealthGuideForWeather } from './insights';
-
 const mapSnapshot = (payload: OpenWeatherPayload, explicitCity?: WeatherCity): WeatherSnapshot => {
   const condition = payload.weather?.[0];
   const city: WeatherCity =
@@ -82,7 +82,7 @@ const safeReadError = async (response: Response): Promise<string> => {
     const text = await response.text();
     return text || response.statusText;
   } catch (error) {
-    return response.statusText;
+    return response.statusText + " " + (error instanceof Error ? error.message : '');
   }
 };
 
@@ -132,7 +132,7 @@ export class WeatherApiClient {
     const results = await Promise.allSettled(cities.map((city) => this.fetchCity(city, units)));
 
     const snapshots: WeatherSnapshot[] = [];
-    const failures: Array<{ city: WeatherCity; reason: unknown }> = [];
+    const failures: { city: WeatherCity; reason: unknown }[] = [];
 
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
