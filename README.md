@@ -49,7 +49,9 @@ Create a React Native application that:
 ## Project Setup
 
 - Install dependencies: `npm install`
+- Copy environment file: `cp .env.example .env`
 - Start Metro/Expo: `npm run start`
+- Run on Android emulator: `npm run android`
 - Lint: `npm run lint`
 - Tests: `npm test`
 - Format check: `npm run format`
@@ -70,14 +72,11 @@ Copy `.env.example` to `.env` and update values as needed:
 
 ```
 EXPO_PUBLIC_AUTH_PASSWORD_PEPPER=put-your-own-pepper
+EXPO_PUBLIC_OWM_API_URL=https://api.openweathermap.org
+EXPO_PUBLIC_OWM_API_KEY=your-openweather-api-key
 ```
 
-After installing dependencies (`npm install`), copy the example file:
-
-```
-cp .env.example .env
-```
-
+> Obtain a free API key from [OpenWeatherMap](https://openweathermap.org/api) and place it in `.env`.
 > This pepper is only used client-side for the challenge; in production it should live on the server.
 
 ### Developer Scripts
@@ -86,6 +85,21 @@ cp .env.example .env
 - `npm run test:single -- path/to/file.test.tsx` executes an individual test file.
 - `npm run lint` / `npm run format` keep the codebase consistent.
 - `npm run lint-staged` is used by the pre-commit hook (Husky + lint-staged). If hooks aren't active, run `git config core.hooksPath .husky/_` once after cloning or run `npm run prepare` manually.
+
+## Weather Dashboard Highlights
+
+- Fetches live conditions for Berlin, London, Paris, Amsterdam, and Prague with OpenWeather per-city requests (free-tier friendly).
+- Caches the latest snapshots and user preferences locally for instant rehydration and offline resilience.
+- Sorting (name, temperature, humidity, wind) and filtering (all, comfortable, rainy) keep the data actionable.
+- Responsive cards, pull-to-refresh, and quick settings panel (theme toggle + sign-out) mirror modern native dashboard patterns across portrait and landscape modes.
+
+### Project Structure
+
+- `components/weather/card` – self-contained card, styling, and metric helpers.
+- `components/weather/controls` – segmented control UI and meta row.
+- `components/weather/dashboard` – hero header copy, sign-out CTA, and layout.
+- `contexts/` – auth and weather providers backed by reducers and services.
+- `services/` – API, storage, and crypto utilities kept framework-agnostic for reuse.
 
 ## Testing Strategy
 
