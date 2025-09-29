@@ -78,7 +78,6 @@ Create a React Native application that:
 - Sessions persist securely via `expo-secure-store` with AsyncStorage fallback when needed.
 - Auth state and cached users hydrate on launch to avoid flash-of-unauthenticated screens.
 - Pepper is injected via `EXPO_PUBLIC_AUTH_PASSWORD_PEPPER`; swap this per build (and note that production apps should hash on the server instead).
-- Current demo intentionally skips login throttling/MFA—called out as future work so reviewers know the trade-offs.
 
 > Future improvement: reintroduce login attempt throttling with persisted counters once the broader experience is finalized.
 
@@ -104,8 +103,8 @@ EXPO_PUBLIC_OWM_API_KEY=your-openweather-api-key
 
 ## Weather Dashboard Highlights
 
-- Fetches live conditions for a curated list of cities with OpenWeather per-city requests (free-tier friendly).
-- Sorting (name, temperature, humidity, wind) and filtering (all, comfortable, rainy) keep the data actionable.
+- Fetches live conditions for list of cities with OpenWeather per-city requests (free-tier friendly).
+- Sorting (name, temperature, humidity, wind) and filtering (all, comfortable, rainy).
 
 **Improvement Opportunity:**
 
@@ -163,12 +162,8 @@ The weather dashboard is designed to be easily extensible. Here are some additio
 These filters can be implemented by extending the filter logic and UI configuration. See the code comments and `filterSnapshots` function for guidance.
 
 ## Screenshots
+
 <img width="200" height="2796" alt="image" src="https://github.com/user-attachments/assets/00533c4e-9b28-4472-8d2e-3500b26eeca9" />
 <img width="200" height="2796" alt="image" src="https://github.com/user-attachments/assets/55d91884-b78d-455c-a0dc-e8aeb8cea7ac" />
 <img width="200" height="2796" alt="image" src="https://github.com/user-attachments/assets/795a81fa-f514-4451-8b8e-c5d11fc4134b" />
 <img width="200" height="2796" alt="image" src="https://github.com/user-attachments/assets/a2724ad7-9669-49ab-b485-404092a15a44" />
-
-
-
-
-
